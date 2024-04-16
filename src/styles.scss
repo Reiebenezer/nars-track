@@ -1,0 +1,137 @@
+@import './components/styles.scss';
+
+:root {
+    --text: #010101;
+    --accent-1: #03234D;
+    --accent-2: #1169B4;
+    --accent-3: #299FF7;
+    --surface: #CEF1FC;
+    --bg: #FFFFFF;
+
+    font-family: 'Raleway Variable';
+    color: var(--text);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    min-height: 100vh;
+    background-color: var(--surface);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+header, main {
+    padding: 1.5rem;
+}
+
+header a {
+    text-decoration: none;
+    color: var(--text);
+}
+
+main {
+    flex-grow: 1;
+}
+
+footer {
+    text-align: center;
+    padding: 0.5rem;
+
+    font-size: 0.75rem;
+}
+
+@import './generics.scss';
+
+// HomePage
+#nurse-login-profiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 0.5rem;
+
+    margin-top: 2rem;
+}
+
+
+// Nurse Login
+form#nurse-login {
+    display: grid;
+    justify-items: start;
+
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+
+// Nurse home
+@keyframes waiting {
+    20%, 80% {
+        opacity: 80%;
+    }
+    
+    50% {
+        opacity: 50%;
+    }
+}
+
+#nurse-home {
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+    gap: 0.25rem;
+}
+
+#nurse-home p.await-input {
+    animation: waiting 4s ease-in-out infinite;
+    margin-bottom: 1rem;
+}
+
+#assigned-patients {
+    padding-block: 1rem;
+    width: 100%;
+}
+
+#assigned-patients h2 {
+    margin-bottom: 1rem;
+}
+
+#assigned-patients:has(ul:empty) {
+    display: none;
+}
+
+#assigned-patients ul {
+    list-style: none;
+
+    display: grid;
+    gap: 0.5rem;
+}
+
+#assigned-patients ul li {
+    border: 1px solid var(--accent-3);
+    border-radius: 6px;
+
+    padding: 0.5rem;
+
+    font-size: 0.9rem;
+}
+
+#patient-data {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(48ch, 1fr));
+
+    
+    gap: 1rem 4rem;
+    max-width: 80%;
+}
+
+#patient-data label {
+    width: auto;
+}

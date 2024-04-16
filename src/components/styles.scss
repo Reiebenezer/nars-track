@@ -1,0 +1,44 @@
+// Nurse
+.nurse-avatar {
+    height: 5rem;
+
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 1fr 1fr;
+
+    gap: 0 0.5rem;
+
+    background-color: var(--bg);
+    padding: 0.5rem;
+
+    border-radius: 8px;
+    cursor: pointer;
+
+    color: var(--text);
+    text-decoration: none;
+
+    transition: 250ms cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.nurse-avatar:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 2px 2px 4px #0002;
+}
+
+.nurse-avatar h4 {
+    align-self: flex-end;
+}
+
+.nurse-avatar p {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.nurse-avatar img {
+    height: 100%;
+    grid-row: 1 / span 2;
+
+    border-radius: 500vw;
+}
+
+// --- Nurse End
