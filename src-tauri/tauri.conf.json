@@ -1,7 +1,7 @@
 {
   "productName": "nars-track",
   "version": "1.0.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "com.tauri.narstrack",
   "build": {
     "beforeDevCommand": "bun run dev",
     "devUrl": "http://localhost:1420",
