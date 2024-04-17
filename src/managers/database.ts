@@ -137,8 +137,8 @@ export default class Database {
 			blood_type: null,
 			civil_status: 'Single',
 			contact_number: null,
-			date_admitted: new Date(),
-			date_discharged: new Date(),
+			datetime_admitted: new Date(),
+			datetime_discharged: new Date(),
 			final_diagnosis: null,
 			height: null,
 			hospital_days: null,
@@ -149,8 +149,6 @@ export default class Database {
 			nationality: null,
 			religion: null,
 			sex: 'F',
-			time_admitted: new Date(),
-			time_discharged: new Date(),
 			ward: null,
 			weight: null
 		 })))
