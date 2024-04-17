@@ -1,3 +1,4 @@
+import Swal from "sweetalert2"
 import Nurse from "../components/nurse"
 import { PatientVitalSigns } from "../components/patient"
 import UtilElement from "../components/util/element"
@@ -23,27 +24,39 @@ export default class NurseHomePage {
 		const open_catalog = document.getElementById('open-catalog')!
 		const list = document.querySelector('#assigned-patients ul')!
 		const form = document.getElementById('patient-data')! as HTMLFormElement
+		
+		this.#getAssignedPatients()
 
-		open_catalog.onclick = () => {
-			if (list.hasChildNodes()) {
-				list.innerHTML = ''
-
-			} else {
-				this.#getAssignedPatients()
-			}
-		}
+		open_catalog.onclick = () => list.parentElement!.classList.toggle('open')
 
 		if (Scanner.instance.connected) {
-			const patientID = await Scanner.instance.waitMessage()
+			let patientID = await Scanner.instance.waitMessage()
+			const nurseName = hash().params.find(p => p[0] === 'name')
 			
+			if (!nurseName) {
+				console.error('Nurse name not defined in params!')
+				return
+			}
+
 			try {
 				// Fetch the data from patient list and match with parsed_data
-				const patient = Database.instance.getPatient(patientID)
+				let patient = Database.instance.getPatient(patientID)
 
-				if (!patient) {
-					indicator_text.innerHTML = 'Patient not found in database'
-					this.init()
-					return
+				while (!patient || patient.data.admitting_nurse !== nurseName[1]) {
+					if (!patient) 
+						indicator_text.innerHTML = 'Patient not found in database'
+
+					else 
+						Swal.fire({
+							icon: 'error',
+							titleText: 'Incorrect Patient Assignment',
+							text: 'You are not assigned to this patient!',
+							timer: 5000,
+						})
+
+					patientID = await Scanner.instance.waitMessage()
+					patient = Database.instance.getPatient(patientID)
+
 				}
 
 				const essential_data = {
@@ -67,9 +80,12 @@ export default class NurseHomePage {
 				form.onsubmit = e => {
 					e.preventDefault() 
 					const data = {...Object.fromEntries(new FormData(form).entries()), timestamp: new Date()} as PatientVitalSigns
+					
 					patient.vitalsigns.push(data)
+					Database.instance.save()
 
-					console.log(patient.vitalsigns)
+					indicator_text.innerHTML = 'Data Saved. Waiting for next input...'
+					form.innerHTML = ''
 				}
 
 				indicator_text.innerHTML = 'Fetch Results:'
@@ -81,6 +97,7 @@ export default class NurseHomePage {
 						const el = new UtilElement('input')
 							.prop('name', entry[0])
 							.prop('value', processEntry(entry[1]))
+							.prop('required')
 						
 						if (entry[1] !== null) el.prop('disabled', '')
 

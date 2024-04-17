@@ -37,12 +37,13 @@ export interface PatientData {
 	birthdate: Date | null
 	birthplace: string | null
 	address: string | null
-	sex: 'F' | 'M'
+	sex: 'F' | 'M' 
 	civil_status: 'Single' | 'Married' | 'Widowed'
 	religion: string | null
 	nationality: string | null
 	contact_number: number | null
-	allergies: { food: string[]; medicine: [] } | null
+	food_allergies: string | null
+	medicine_allergies: string | null
 	blood_type: string | null
 	height: number | null
 	weight: number | null
@@ -50,10 +51,8 @@ export interface PatientData {
 	kin_relationship: string | null
 	kin_address: string | null
 	kin_contact_number: number | null
-	date_admitted: Date | null
-	time_admitted: Date | null
-	date_discharged: Date | null
-	time_discharged: Date | null
+	datetime_admitted: Date | null
+	datetime_discharged: Date | null
 	hospital_days: number | null
 	ward: string | null
 	attending_physician: string | null

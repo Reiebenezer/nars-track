@@ -21,19 +21,15 @@ export default class Database {
 	}
 
     async init() {
-		const store = await new Store('db.bin')
+		this.store = await new Store('db.bin')
 
-		const patientDatas = JSON.parse(await store.get('patients') ?? '[]') as { _id: string, data: PatientData, vitalsigns: PatientVitalSigns[], fdar: PatientFdar }[]
-		const  nursesDatas = JSON.parse(await store.get('nurses') ?? '[]') as { _id: string, data: NurseData }[]
+		const patientDatas = JSON.parse(await this.store.get('patients') ?? '[]') as { _id: string, data: PatientData, vitalsigns: PatientVitalSigns[], fdar: PatientFdar }[]
+		const  nursesDatas = JSON.parse(await this.store.get('nurses') ?? '[]') as { _id: string, data: NurseData }[]
 
 		this.patients = patientDatas.map(p => new Patient(p.data).setvitalsigns(p.vitalsigns).setFdar(p.fdar).setID(p._id))
 		this.nurses   =  nursesDatas.map(n => new Nurse(n.data).setID(n._id))
 		
     }
-
-	addPatient(patient: Patient) {
-		this.patients.push(patient)
-	}
 
 	getPatient(id: string) {
 		return this.patients.find(p => p._id === id)
@@ -41,6 +37,26 @@ export default class Database {
 
 	getPatients(nurseID: string) {
 		return this.patients.filter(p => p.data.admitting_nurse === nurseID)
+	}
+	
+	addPatient(patient: Patient) {
+		this.patients.push(patient)
+		this.save()
+	}
+
+	removePatient(patient: Patient) {
+		this.patients.splice(this.patients.indexOf(patient))
+		this.save()
+	}
+
+	addNurse(nurse: Nurse) {
+		this.nurses.push(nurse)
+		this.save()
+	}
+
+	removeNurse(nurse: Nurse) {
+		this.nurses.splice(this.nurses.indexOf(nurse), 1)
+		this.save()
 	}
 
 	populate() {
@@ -108,15 +124,13 @@ export default class Database {
 			'Evelyn Anderson',
 		]
 
-		nurse_names.forEach((name, i) => this.nurses.push(new Nurse({ name, password: '', profile: i })))
+		nurse_names.forEach((name, i) => this.nurses.push(new Nurse({ name, title: 'Nurse', password: '', profile: i })))
 		patient_names.forEach((name, i) => this.patients.push(new Patient({ name, 
 			address: null,
 			admitting_diagnosis: null,
 			admitting_nurse: this.nurses[i%this.nurses.length].data.name,
-			allergies: { 
-				food: [],
-				medicine: []
-			},
+			food_allergies: null,
+			medicine_allergies: null,
 			attending_physician: null,
 			birthdate: null,
 			birthplace: null,

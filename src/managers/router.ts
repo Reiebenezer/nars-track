@@ -1,7 +1,7 @@
 import hash from "../components/util/url-hash"
-import HomePage from "../pages/home"
-import NurseHomePage from "../pages/nurse-home"
-import NurseLoginPage from "../pages/nurse-login"
+import { HomePage, NurseLoginPage, NurseHomePage, AdminLoginPage, AdminHomePage, AdminAddNursePage, AdminAddPatientPage, AdminPatientListPage } from "../pages"
+import anime from 'animejs';
+
 
 export default class Router {
     static #instance: Router
@@ -14,29 +14,73 @@ export default class Router {
     async init() {
         const hashChange = async () => {
             const { url, params } = hash()
-            this.container.innerHTML = await this.#fetchHtml(url, params)
-    
-            this.#handleRoutes(hash().url)
+            this.#handleRoutes(hash().url, await this.#fetchHtml(url, params))
         }
 
         hashChange()
 		window.onhashchange = hashChange
+
+        document.getElementById('go-back')?.addEventListener('click', () => {
+            history.back()
+        })
     }
 
-    #handleRoutes(hash: string) {
-        switch(hash) {
-            case '':
-                HomePage.instance.init()
-                break
+    #handleRoutes(hash: string, html: string) {
+        const header = document.querySelector('header')!
+        header.className = header.className.replace(/route-[A-Za-z-]+/g, `route-${hash || 'index'}`)
 
-            case 'nurse-login':
-                NurseLoginPage.instance.init()
-                break
+        anime({
+            targets: this.container,
+            opacity: [1, 0],
+            translateX: ['0', '-15em'],
+            easing: 'easeOutQuint',
+            duration: 600,
+            complete: () => {
+                this.container.innerHTML = html
 
-            case 'nurse-home':
-                NurseHomePage.instance.init()
-                break
-        }
+                switch(hash) {
+                    case '':
+                        HomePage.instance.init()
+                        break
+        
+                    case 'nurse-login':
+                        NurseLoginPage.instance.init()
+                        break
+        
+                    case 'nurse-home':
+                        NurseHomePage.instance.init()
+                        break
+        
+                    case 'admin-login':
+                        AdminLoginPage.instance.init()
+                        break
+        
+                    case 'admin-home':
+                        AdminHomePage.instance.init()
+                        break
+        
+                    case 'admin-addnurse':
+                        AdminAddNursePage.instance.init()
+                        break
+        
+                    case 'admin-addpatient':
+                        AdminAddPatientPage.instance.init()
+                        break
+        
+                    case 'admin-patientlist':
+                        AdminPatientListPage.instance.init()
+                        break
+                }
+
+                anime({
+                    targets: this.container,
+                    translateX: ['15em', 0],
+                    opacity: [0, 1],
+                    easing: 'easeOutQuint',
+                    duration: 600,
+                })
+            }
+        })
     }
 
     static get instance() {
@@ -49,7 +93,9 @@ export default class Router {
     async #fetchHtml(url: string, params: string[][]) {
         let html = await (await fetch(`/src/routes/${url || 'index'}.html`)).text()
 
-        if (!html) html = await (await fetch(`/src/routes/404.html`)).text()
+        
+        if (await (await fetch(`/src/routes/${url || 'index'}.html`)).text() === await (await fetch('/')).text()) 
+            html = await (await fetch(`/src/routes/404.html`)).text()
 
         ;[...html.matchAll(/\{?\?(param=\w+)\}/g)].forEach(param => {
             const paramKey = param[1].replace('param=', '')

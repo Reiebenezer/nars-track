@@ -8,6 +8,9 @@
     --surface: #CEF1FC;
     --bg: #FFFFFF;
 
+    --disabled: color-mix(in srgb, var(--accent-3) 30%, lightgray);
+    --disabled-text: color-mix(in srgb, var(--accent-3) 30%, gray);
+
     font-family: 'Raleway Variable';
     color: var(--text);
 }
@@ -18,7 +21,8 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     min-height: 100vh;
     background-color: var(--surface);
 }
@@ -28,17 +32,76 @@ body {
     flex-direction: column;
 }
 
-header, main {
+header,
+main {
     padding: 1.5rem;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
 }
 
 header a {
     text-decoration: none;
     color: var(--text);
+
+    display: none;
+    cursor: pointer;
+
+    font-weight: 600;
+    font-size: 0.9rem;
+
+    position: relative;
+    padding-block: 0.25rem;
+
+    &::after {
+        content: '';
+        
+        position: absolute;
+        inset: 0;
+
+        width: 100%;
+        border-bottom: 2px solid var(--accent-2);
+
+        transform-origin: right;
+        transform: scaleX(0);
+
+        transition: transform 450ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    &:hover::after {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+}
+
+header.route-nurse-home #logout,
+header.route-admin-home #logout
+{
+    display: unset;
+}
+
+header.route-index #to-admin {
+    display: unset;
+}
+
+header.route-admin-patientlist #go-back {
+    display: unset;
 }
 
 main {
     flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+    h1 {
+        font-size: 2.5rem;
+
+    }
 }
 
 footer {
@@ -47,6 +110,7 @@ footer {
 
     font-size: 0.75rem;
 }
+
 
 @import './generics.scss';
 
@@ -57,6 +121,15 @@ footer {
     gap: 0.5rem;
 
     margin-top: 2rem;
+
+    &:empty::after {
+        content: 'No profiles here. Check out the Admin Page and add a new nurse!';
+        color: var(--disabled-text);
+
+        font-style: italic;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
 }
 
 
@@ -67,15 +140,22 @@ form#nurse-login {
 
     gap: 0.5rem;
     margin-top: 2rem;
+
+    > div {
+        display: flex;
+        gap: 1rem;
+    }
 }
 
 
 // Nurse home
 @keyframes waiting {
-    20%, 80% {
+
+    20%,
+    80% {
         opacity: 80%;
     }
-    
+
     50% {
         opacity: 50%;
     }
@@ -97,14 +177,17 @@ form#nurse-login {
 #assigned-patients {
     padding-block: 1rem;
     width: 100%;
+
+
+    display: none;
 }
 
 #assigned-patients h2 {
     margin-bottom: 1rem;
 }
 
-#assigned-patients:has(ul:empty) {
-    display: none;
+#assigned-patients.open {
+    display: block;
 }
 
 #assigned-patients ul {
@@ -127,11 +210,218 @@ form#nurse-login {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(48ch, 1fr));
 
-    
+
     gap: 1rem 4rem;
     max-width: 80%;
 }
 
 #patient-data label {
     width: auto;
+}
+
+// Admin Login
+#admin-login {
+    p {
+        margin-top: 0.5rem;
+    }
+
+    label {
+        margin-top: 2rem;
+    }
+
+    > div {
+        margin-top: 1rem;
+        display: flex;
+        gap: 1rem;
+    }
+}
+
+
+// Admin Home Page
+#admin-home .container {
+    margin-block: 1rem;
+    padding: 0.5rem;
+
+    border: 1px solid var(--accent-3);
+    border-radius: 0.5rem;
+
+    
+    .title {
+        display: flex;
+
+        align-items: center;
+        gap: 0.5rem;
+
+        h4 { flex-grow: 1 }
+
+        #show-nurse-list,
+        #show-patient-list {
+            span {
+                transition: transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
+            }
+        
+            &.up span {
+                transform: rotate(-180deg);
+            }
+        }
+    }
+
+    ul {
+        max-height: 0;
+        overflow-y: hidden;
+
+        transition: max-height 650ms cubic-bezier(0.33, 1, 0.68, 1);
+
+        &:empty::after {
+            content: 'No registered nurses. Click "Add a Nurse to populate this list!"';
+            color: var(--disabled-text);
+
+            font-style: italic;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        li {
+            list-style: none;
+            
+            border-radius: 0.25rem;
+            background-color: var(--bg);
+    
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+
+            display: grid;
+
+            grid-template: auto 1fr / auto 1fr auto;
+            column-gap: 0.5rem;
+
+            img {
+                grid-row: 1 / span 2;
+                height: 4rem;
+            }
+    
+            small {
+                color: color-mix(in srgb, var(--text) 40%, var(--bg));
+            }
+
+            button {
+                grid-column: 3;
+                grid-row: 1 / span 2;
+
+            }
+        }
+    }
+}
+
+
+// Add nurse
+#admin-addnurse .grid-content,
+#admin-addpatient .grid-content {
+    margin-block: 2rem;
+    
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(36ch, 1fr));
+    
+    width: 100%;
+
+    align-items: end;
+    gap: 1rem 3rem;
+
+    label {
+        width: 100%;
+
+        &.preview {
+            opacity: 0;
+            transition: opacity 650ms cubic-bezier(0.23, 1, 0.320, 1);
+
+            &.show {
+                opacity: 1
+            }
+        }
+
+        input, select, option {
+            margin-top: 0.25rem;
+            
+            font-family: inherit;
+            font-weight: 500;
+        }
+    }
+    
+    img {
+        height: 4rem;
+        margin: 0.5rem;
+    }
+
+    input {
+        font-size: 0.8rem;
+        font-family: inherit;
+    }
+}
+
+#admin-addpatient,
+#admin-addnurse {
+    hr {
+        margin-block: 1rem;
+    }
+
+    .actions {
+        display: flex;
+        gap: 1rem;
+    }
+}
+
+#admin-patientlist {
+    .search-box, 
+    ul li {
+        border-radius: 8px;
+    }
+
+    .search-box {
+        display: flex;
+        gap: 0.5rem;
+
+        margin-block: 1rem;
+        padding-inline: 0.5rem;
+
+        width: fit-content;
+        background-color: var(--bg);
+
+        align-items: center;
+
+        label {
+            margin-block: 0.5rem;
+
+            input {
+                border-bottom-color: color-mix(in srgb, var(--surface) 40%, var(--text));
+            }
+        }
+    }
+
+    ul {
+        list-style: none;
+
+        &:empty::after {
+            content: 'No patients admitted';
+            color: var(--disabled-text);
+        }
+
+        li {
+            border: 1px solid var(--accent-3);
+            
+            padding: 0.5rem;
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            > div {
+                display: flex;
+                gap: 0.5rem;
+            }
+
+            &.discharged {
+                border-color: var(--disabled);
+            }
+        }
+    }
 }

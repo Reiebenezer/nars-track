@@ -1,0 +1,40 @@
+<h1>Add New Nurse</h1>
+<p>Fill out the information below.</p>
+<form id="admin-addnurse">
+    <div class="grid-content">
+
+        <label>
+            Nurse Name
+            <input type="text" id="name">
+        </label>
+        <label>
+            Nurse Title
+            <select id="title">
+                <option value="Nurse">Nurse</option>
+                <option value="Lead Nurse">Lead Nurse</option>
+            </select>
+        </label>
+        <label>
+            Password
+            <input type="password" id="password-1">
+        </label>
+        <label>
+            Confirm Password
+            <input type="password" id="password-2">
+        </label>
+        <label>
+            Profile Picture
+            <input type="file" id="profile" accept="image/*">
+        </label>
+    
+        <label class="preview">
+            Preview Image
+            <img src="" id="preview" alt=" ">
+        </label>
+    </div>
+    <hr>
+    <div class="actions">
+        <button type="submit">Add Nurse</button>
+        <a href="#admin-home" class="button-like secondary">Cancel</a>
+    </div>
+</form>

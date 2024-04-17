@@ -16,13 +16,13 @@ export default class NurseLoginPage {
     }
 
     init() {
-        const el = document.getElementById('nurse-login') as HTMLFormElement
-        if (!el) return
+        const form = document.getElementById('nurse-login') as HTMLFormElement
+        (form.querySelector('input#password') as HTMLInputElement).focus()
 
-        el.onsubmit = e => {
+        form.onsubmit = e => {
             e.preventDefault()
 
-            const password = (el.querySelector('#password') as HTMLInputElement).value
+            const password = (form.querySelector('#password') as HTMLInputElement).value
             const name = document.querySelector('#name')?.innerHTML
 
             const nurse_password = Database.instance.nurses.find(nurse => nurse.data.name === name)?.data.password
@@ -36,6 +36,7 @@ export default class NurseLoginPage {
                 const name = name_param[1]
                 window.location.hash = `nurse-home?name=${name}`
             }
+            else form.querySelector('.error-text')?.classList.remove('hidden')
         }
     }
 }

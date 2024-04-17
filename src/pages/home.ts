@@ -1,4 +1,3 @@
-import Nurse from '../components/nurse'
 import Database from '../managers/database'
 
 export default class HomePage {
@@ -17,9 +16,7 @@ export default class HomePage {
 	}
 
 	init() {
-		const nurses = Database.instance.nurses
-
-		nurses.forEach(nurse => 
+		Database.instance.nurses.forEach(nurse => 
 			nurse.avatar.parent(
 				document.getElementById('nurse-login-profiles')!
 			)

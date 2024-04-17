@@ -56,7 +56,7 @@ label:focus-within::after {
 }
 
 // Button
-button {
+button, a.button-like {
     padding: 0.4rem 1.2rem;
 
     font-family: inherit;
@@ -70,6 +70,29 @@ button {
     color: var(--bg);
 
     cursor: pointer;
+
+    text-decoration: none;
+    text-align: center;
+
+    &.icon {
+        padding: 0.5rem;
+        aspect-ratio: 1;
+
+        span { 
+            display: block;
+            aspect-ratio: 1;
+        }
+    }
+
+    &.secondary {
+        color: var(--accent-2);
+        background-color: var(--bg);
+    }
+
+    &:disabled {
+        color: var(--disabled-text);
+        background-color: var(--disabled);
+    }
 }
 
 hr {
@@ -80,4 +103,23 @@ hr {
 
     height: 1px;
     background-color: var(--accent-3);
+}
+
+img {
+    aspect-ratio: 1;
+
+    object-position: top;
+    object-fit: cover;
+
+    border-radius: 2000vw;
+    background-color: var(--accent-3);
+}
+
+p.error-text {
+    color: red;
+    font-size: 0.75rem;
+
+    &.hidden {
+        display: none;
+    }
 }

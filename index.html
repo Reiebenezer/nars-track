@@ -3,7 +3,6 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="stylesheet" href="/src/styles.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NarsTrack</title>
 
@@ -11,8 +10,13 @@
 </head>
 
 <body>
-  <header>
-    <a href="#"><h2>NarsTrack</h2></a>
+  <header class="route-index">
+    <h2>NarsTrack</h2>
+    <nav>
+      <a href="#admin-login" id="to-admin">ADMIN</a>
+      <a href="#" id="logout">LOG OUT</a>
+      <a id="go-back">GO BACK</a>
+    </nav>
   </header>
 
   <main id="query-replace"></main>

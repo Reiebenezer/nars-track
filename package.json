@@ -11,12 +11,19 @@
   },
   "dependencies": {
     "@fontsource-variable/raleway": "^5.0.18",
+    "@phosphor-icons/web": "^2.1.1",
     "@tauri-apps/api": ">=2.0.0-beta.0",
+    "@tauri-apps/plugin-dialog": "^2.0.0-beta.2",
+    "@tauri-apps/plugin-fs": "^2.0.0-beta.2",
     "@tauri-apps/plugin-shell": ">=2.0.0-beta.0",
     "@tauri-apps/plugin-sql": "^2.0.0-beta.2",
     "@tauri-apps/plugin-store": "^2.0.0-beta.2",
+    "@types/animejs": "^3.1.12",
+    "@types/qrcode": "^1.5.5",
     "animejs": "^3.2.2",
-    "sass": "^1.75.0"
+    "qrcode": "^1.5.3",
+    "sass": "^1.75.0",
+    "sweetalert2": "^11.10.7"
   },
   "devDependencies": {
     "@tauri-apps/cli": ">=2.0.0-beta.0",

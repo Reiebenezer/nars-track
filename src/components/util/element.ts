@@ -22,7 +22,10 @@ export default class UtilElement {
     }
 
     class(...classNames: string[]) {
-        this.#element.classList.add(...classNames)
+        classNames.forEach(c => {
+            if (!c) return
+            this.#element.classList.add(c)
+        })
         return this
     }
 
@@ -44,13 +47,25 @@ export default class UtilElement {
         return this
     }
 
+    prepend(...elements: Array<Element | UtilElement>) { 
+        this.#element.prepend(...elements.map(el => el instanceof Element ? el : el.#element))
+        this.#children.unshift(...elements.map(el => el instanceof Element ? new UtilElement(el) : el))
+
+        return this
+    }
+
     parent(el: HTMLElement | UtilElement) {
         el.append(this.#element)
         return this
     }
 
-    prop(key: string, value: string) {
-        this.#element.setAttribute(key, value)
+    prop(key: string, value?: string) {
+        this.#element.setAttribute(key, value ?? '')
+        return this
+    }
+
+    toggleProp(key: string, condition?: boolean) {
+        this.#element.toggleAttribute(key, condition)
         return this
     }
 
@@ -59,7 +74,12 @@ export default class UtilElement {
         return this
     }
 
-    get(key: 'html' | 'class' | 'id' | 'prop', value?: string) {
+    remove() {
+        this.#element.remove()
+        return this
+    }
+
+    get(key: 'html' | 'class' | 'id' | 'prop' | 'tag', value?: string) {
         switch (key) {
             case 'html':
                 return this.#element.innerHTML
@@ -73,7 +93,14 @@ export default class UtilElement {
             case 'prop':
                 if (!value) return null
                 return this.#element.getAttribute(value)
+
+            case 'tag':
+                return this.#element.tagName.toLowerCase()
         }
+    }
+
+    getChild(matchingFunction: (el: UtilElement) => boolean) {
+        return this.#children.find(matchingFunction)
     }
 
     get element() {

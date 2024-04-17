@@ -3,7 +3,6 @@ import UtilElement from './util/element'
 export default class Nurse {
 	avatar: UtilElement
 	data: NurseData
-	profile_picture?: string
 
 	_id: string = crypto.randomUUID()
 
@@ -16,10 +15,12 @@ export default class Nurse {
 			.append(
 				new UtilElement('img').prop(
 					'src',
-					`/src/assets/profiles/profile${data.profile % 9}.jpg`
+						typeof data.profile === 'number'
+							? `/src/assets/profiles/profile${data.profile % 9}.jpg`
+							: data.profile
 				),
 				new UtilElement('h4').html(`${data.name}`),
-				new UtilElement('p').html('Nurse 1')
+				new UtilElement('p').html(data.title)
 			)
 			.class('nurse-avatar')
 	}
@@ -32,6 +33,7 @@ export default class Nurse {
 
 export interface NurseData {
 	name: string
-	profile: number
+	profile: number | string
 	password: string
+	title: 'Nurse' | 'Lead Nurse'
 }

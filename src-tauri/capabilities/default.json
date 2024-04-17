@@ -20,12 +20,15 @@
     "sql:allow-execute",
     "sql:allow-select",
     "store:default",
-    
     "store:allow-get",
     "store:allow-save",
     "store:allow-set",
     "store:allow-clear",
     "store:allow-delete",
-    "store:allow-entries"
+    "store:allow-entries",
+    "fs:default",
+    "dialog:default",
+    "dialog:allow-save",
+    "fs:allow-app-write"
   ]
 }

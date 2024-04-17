@@ -1,0 +1,53 @@
+<h1>Admit Patient</h1>
+<p>Fill out the information below.</p>
+<form id="admin-addpatient">
+    <div class="grid-content">
+
+        <label>Name                 <input autofocus required type="text" name="name"></label>
+        <label>Birthdate            <input required type="date" name="birthdate" value="2024-01-01"></label>
+        <label>Birthplace           <input required type="text" name="birthplace"></label>
+        <label>Address              <input required type="text" name="address"></label>
+        <label>Sex                  <select            name="sex">
+                                        <option value="F">F</option>
+                                        <option value="M">M</option>
+                                    </select>
+                                </label>
+        <label>Civil Status         <select            name="civil_status">
+                                        <option value="Single">Single</option>
+                                        <option value="Married">Married</option>
+                                        <option value="Widowed">Widowed</option>
+                                    </select>
+        </label>
+        <label>Religion             <input required type="text" name="religion"></label>
+        <label>Nationality          <input required type="text" name="nationality"></label>
+        <label>Contact Number       <input required type="text" name="contact_number"></label>
+        <label>Food Allergies       <input type="text" name="food_allergies" list="na-entry"></label>
+        <label>Medicine Allergies   <input type="text" name="medicine_allergies" list="na-entry"></label>
+        <datalist id="na-entry">
+            <option value="N/A"></option>
+        </datalist>
+        <label>Blood Type           <input required type="text" name="blood_type"></label>
+        <label>Height (cm)          <input required type="number" min="0" name="height"></label>
+        <label>Weight (kg)          <input required type="number" min="0" name="weight"></label>
+        <label>Kin Name             <input required type="text" name="kin_name"></label>
+        <label>Kin Relationship     <input required type="text" name="kin_relationship"></label>
+        <label>Kin Address          <input required type="text" name="kin_address"></label>
+        <label>Kin Contact #        <input required type="text" name="kin_contact_number"></label>
+        <label>Date and Time Admitted<input required type="datetime-local" name="datetime_admitted" value="2024-01-01"></label>
+        <label>Ward                 <select              name="ward">
+                                        <option value="general">General</option>
+                                        <option value="emergency">Emergency</option>
+                                        <option value="respiratory">Respiratory</option>
+                                    </select>
+        </label>
+        <label>Attending Physician  <input required type="text" name="attending_physician"></label>
+        <label>Admitting Nurse      <input required type="text" name="admitting_nurse" list="admitting-nurses"></label>
+            <datalist id="admitting-nurses"></datalist>
+        <label>Admitting Diagnosis  <input required type="text" name="admitting_diagnosis"></label>
+    </div>
+    <hr>
+    <div class="actions">
+        <button type="submit">Add Patient</button>
+        <a href="#admin-home" class="button-like secondary">Cancel</a>
+    </div>
+</form>
