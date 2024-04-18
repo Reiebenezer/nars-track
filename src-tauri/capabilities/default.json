@@ -30,6 +30,12 @@
     "dialog:default",
     "dialog:allow-save",
     "fs:allow-app-write",
-    "process:default"
+    "process:default",
+    "fs:read-all",
+    {
+      "identifier": "fs:scope",
+      "allow": [{ "path": "$RESOURCE/**" }]
+    }
+
   ]
 }

@@ -1,3 +1,4 @@
+import { BaseDirectory, readTextFile } from "@tauri-apps/plugin-fs";
 import hash from "../components/util/url-hash"
 import { HomePage, NurseLoginPage, NurseHomePage, AdminLoginPage, AdminHomePage, AdminAddNursePage, AdminAddPatientPage, AdminPatientListPage } from "../pages"
 import anime from 'animejs';
@@ -14,7 +15,9 @@ export default class Router {
     async init() {
         const hashChange = async () => {
             const { url, params } = hash()
-            this.#handleRoutes(hash().url, await this.#fetchHtml(url, params))
+            const html = await this.#fetchHtml(url, params)
+            // console.log(html)
+            this.#handleRoutes(hash().url, html)
         }
 
         hashChange()
@@ -91,11 +94,12 @@ export default class Router {
     }
 
     async #fetchHtml(url: string, params: string[][]) {
-        let html = await (await fetch(`/src/routes/${url || 'index'}.html`)).text()
+        // let html = await (await fetch(`/src/routes/${url || 'index'}.html`)).text()
+        let html = await readTextFile(`routes/${url || 'index'}.html`, { baseDir: BaseDirectory.Resource})
+        // console.log(html)
 
-        
-        if (await (await fetch(`/src/routes/${url || 'index'}.html`)).text() === await (await fetch('/')).text()) 
-            html = await (await fetch(`/src/routes/404.html`)).text()
+        // if (await (await fetch(`/src/routes/${url || 'index'}.html`)).text() === await (await fetch('/')).text()) 
+        //     html = await (await fetch(`/src/routes/404.html`)).text()
 
         ;[...html.matchAll(/\{?\?(param=\w+)\}/g)].forEach(param => {
             const paramKey = param[1].replace('param=', '')
@@ -107,6 +111,7 @@ export default class Router {
             html = html.replace(param[0], paramValue)
         })
 
-        return html.slice(html.indexOf('\n') + 1)
+        // return html.slice(html.indexOf('\n') + 1)
+        return html
     }
 }

@@ -16,4 +16,5 @@ export default defineConfig(async () => ({
       ignored: ["**/src-tauri/**"],
     },
   },
+  assetsInclude: ['/src/pages/*.html']
 }));
