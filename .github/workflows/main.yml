@@ -1,6 +1,8 @@
-name: "publish-manual"
+name: "publish"
 
-on: pull_request
+on: 
+  workflow_dispatch:
+
 
 # `tauri-action` can also upload app bundles to an existing GitHub release.
 # This workflow uses different actions to create and publish the release.
@@ -18,9 +20,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
+        uses: oven-sh/setup-bun@v1
 
       - name: get version
         run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
@@ -62,10 +62,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
+      - name: setup bun
+        uses: oven-sh/setup-bun@v1
 
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
