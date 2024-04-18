@@ -1,3 +1,4 @@
+import { readTextFile } from "@tauri-apps/plugin-fs";
 import hash from "../components/util/url-hash"
 import { HomePage, NurseLoginPage, NurseHomePage, AdminLoginPage, AdminHomePage, AdminAddNursePage, AdminAddPatientPage, AdminPatientListPage } from "../pages"
 import anime from 'animejs';
@@ -91,7 +92,8 @@ export default class Router {
     }
 
     async #fetchHtml(url: string, params: string[][]) {
-        let html = await (await fetch(`/src/routes/${url || 'index'}.html`)).text()
+        // let html = await (await fetch(`/src/routes/${url || 'index'}.html`)).text()
+        let html = await readTextFile(`/routes/${url || 'index'}.html`)
 
         
         if (await (await fetch(`/src/routes/${url || 'index'}.html`)).text() === await (await fetch('/')).text()) 
