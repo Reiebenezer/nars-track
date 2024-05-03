@@ -26,12 +26,10 @@ export default class AdminAddPatientPage {
             const data = {
                 ...entries,
                 datetime_discharged: null,
-                time_discharged: null,
                 hospital_days: null,
                 final_diagnosis: null
             }
 
-            console.log(data)
             Database.instance.addPatient(new Patient(data as unknown as PatientData))
             window.location.hash = 'admin-home'
         }

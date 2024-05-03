@@ -31,6 +31,7 @@
     "dialog:allow-save",
     "fs:allow-app-write",
     "process:default",
+    "process:allow-exit",
     "fs:read-all",
     {
       "identifier": "fs:scope",

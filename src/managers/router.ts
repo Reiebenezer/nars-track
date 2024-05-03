@@ -1,6 +1,6 @@
 import { BaseDirectory, readTextFile } from "@tauri-apps/plugin-fs";
 import hash from "../components/util/url-hash"
-import { HomePage, NurseLoginPage, NurseHomePage, AdminLoginPage, AdminHomePage, AdminAddNursePage, AdminAddPatientPage, AdminPatientListPage } from "../pages"
+import { HomePage, NurseLoginPage, NurseHomePage, AdminLoginPage, AdminHomePage, AdminAddNursePage, AdminAddPatientPage, AdminPatientListPage, AdminViewPatientPage } from "../pages"
 import anime from 'animejs';
 
 
@@ -32,6 +32,8 @@ export default class Router {
         const header = document.querySelector('header')!
         header.className = header.className.replace(/route-[A-Za-z-]+/g, `route-${hash || 'index'}`)
 
+
+        this.container.style.pointerEvents = 'none'
         anime({
             targets: this.container,
             opacity: [1, 0],
@@ -40,6 +42,8 @@ export default class Router {
             duration: 600,
             complete: () => {
                 this.container.innerHTML = html
+                this.container.style.pointerEvents = ''
+
 
                 switch(hash) {
                     case '':
@@ -72,6 +76,10 @@ export default class Router {
         
                     case 'admin-patientlist':
                         AdminPatientListPage.instance.init()
+                        break
+
+                    case 'admin-viewpatient':
+                        AdminViewPatientPage.instance.init()
                         break
                 }
 

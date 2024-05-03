@@ -60,8 +60,17 @@ export default class AdminPatientListPage {
 					.append(
 						new UtilElement("div")
 						.append(
+							new UtilElement('button')
+								.class('icon')
+								.prop('title', 'View Patient Details')
+								.html('<span class="ph-bold ph-folder-simple"></span>')
+								.on('click', () => {
+									// View Patient Details
+									window.location.hash = `admin-viewpatient?id=${patient._id}`
+								}),
+
 							new UtilElement("button")
-								.class("icon")
+								.class("icon", 'secondary')
 								.prop("title", "Generate and download QR code")
 								.toggleProp('disabled', patient.data.datetime_discharged !== null)
 								.html('<span class="ph-bold ph-qr-code"></span>')
@@ -111,12 +120,15 @@ export default class AdminPatientListPage {
 										cancelButtonText: 'Cancel',
 										confirmButtonText: 'Yes, discharge',
 										icon: 'warning'
-									}).then(() => {
-										patient.data.datetime_discharged = new Date()
-										patient.data.hospital_days = Math.ceil(
-											Math.abs(new Date().getTime() - patient.data.datetime_admitted!.getTime()) /
-											(1000 * 60 * 60 * 24)
-										)
+									}).then(res => {
+										if (res.isConfirmed) {
+											patient.data.datetime_discharged = new Date()
+											patient.data.hospital_days = Math.ceil(
+												Math.abs(new Date().getTime() - patient.data.datetime_admitted!.getTime()) /
+												(1000 * 60 * 60 * 24)
+											)
+										}
+
 									})
 								})
 						)

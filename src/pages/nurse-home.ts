@@ -27,7 +27,16 @@ export default class NurseHomePage {
 		
 		this.#getAssignedPatients()
 
-		open_catalog.onclick = () => list.parentElement!.classList.toggle('open')
+		const parent = list.parentElement!
+		parent.style.setProperty('--max-height', parent.scrollHeight + 'px')
+		open_catalog.onclick = () => {
+			open_catalog.classList.toggle('secondary')
+			open_catalog.innerHTML = 
+				open_catalog.innerHTML === 'Open Catalog'
+					? 'Close Catalog'
+					: 'Open Catalog'
+			parent.classList.toggle('open')
+		}
 
 		if (Scanner.instance.connected) {
 			let patientID = await Scanner.instance.waitMessage()
@@ -134,14 +143,66 @@ export default class NurseHomePage {
 	#getAssignedPatients() {
 		const name = hash().params.find(item => item[0] === 'name')![1]
 		const patients = Database.instance.getPatients(name)
+		const nurses = Database.instance.nurses.map(n => n.data.name)
 
 		document
 			.querySelector('#assigned-patients ul')
 			?.append(
 				...patients.map(p =>
-					new UtilElement('li').html(
-						`<strong>Name: </strong>${p.data.name}`
-					).element
+					new UtilElement('li')
+						.html(`<p><strong>Name: </strong>${p.data.name}</p>`)
+						.append(
+							new UtilElement('button')
+								.class('secondary', 'icon')
+								.append(new UtilElement('i').class('ph-bold', 'ph-share'))
+								.on('click', () => {
+									Swal.fire({
+										icon: 'warning',
+										titleText: 'Share patient to nurse',
+										html: `<p>Give a nurse access to your patient catalog.</p><p class="error-text"><small>Warning: You will lose access to this patient!<br>The nurse must return the access to you after.</small></p><datalist id='nurse-datalist'>${
+											nurses.map(n => `<option value="${n}" />`)
+										}</datalist>`, 
+										input: "text",
+										inputAttributes: {
+											"list": "nurse-datalist"
+										},
+										allowEnterKey: false,
+										inputValidator: value => {
+											if (!value)
+												return 'You did not assign a nurse!'
+
+											if (!nurses.includes(value)) 
+												return 'Nurse does not exist in the database!'
+										}
+									}).then(result => {
+										if (result.isConfirmed) {
+											Swal.fire({
+												icon: 'warning',
+												title: 'Are you sure?',
+												text: `Transfer access to ${result.value}?`
+											}).then(res => {
+												if (res.isConfirmed) {
+													p.data.admitting_nurse = result.value
+
+													document.querySelector('#assigned-patients ul')!.innerHTML = ''
+													
+													this.#getAssignedPatients()
+													Database.instance.save()
+		
+													Swal.fire({
+														icon: 'success',
+														title: 'Set Nurse Successful',
+														html: `Successfully set admitting nurse to<br>${result.value}!`,
+														timer: 5000,
+													})
+												}
+											})
+
+										}
+									})
+								})
+						)
+						.element
 				)
 			)
 	}

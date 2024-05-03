@@ -15,10 +15,12 @@ if (window.location.pathname !== '/') window.location.href = '/'
 if (window.location.hash !== '') window.location.hash = ''
 
 Database.instance.init().then(() => {
+    document.body.style.opacity = '1'
+
     if (debug.bypass_ws) Router.instance.init()
     
     else 
-    Scanner.instance.init('192.168.1.107', 12345)
+    Scanner.instance.init('192.168.1.1', 6969)
         .then(msg => {
             console.log(msg)
             Router.instance.init()
@@ -28,12 +30,20 @@ Database.instance.init().then(() => {
             console.error(err)
     
             Swal.fire({
-                text: 'The application cannot find the scanner. Launch the app anyway?'
+                icon: 'error',
+                html: 'The application cannot find the scanner.<br>Run the app anyway?',
+                allowEscapeKey: true,
+                allowOutsideClick: false,
+                showCancelButton: true,
+
+                confirmButtonText: 'Run',
+                cancelButtonText: 'Exit App'
             }).then(result => {
                 if (result.isConfirmed)
                     Router.instance.init()
-    
-                else exit(1)
+                
+                else
+                    exit(1)
             })
         })
 })

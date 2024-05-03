@@ -6,6 +6,7 @@ import NurseHomePage from "./nurse-home";
 import NurseLoginPage from "./nurse-login";
 import AdminAddPatientPage from "./admin-addpatient";
 import AdminPatientListPage from "./admin-patientlist";
+import AdminViewPatientPage from "./admin-viewpatient";
 
 export {
     AdminHomePage,
@@ -15,5 +16,6 @@ export {
     NurseLoginPage,
     AdminAddNursePage,
     AdminAddPatientPage,
-    AdminPatientListPage
+    AdminPatientListPage,
+    AdminViewPatientPage
 }

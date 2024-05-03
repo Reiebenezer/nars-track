@@ -1,3 +1,4 @@
+import Swal from "sweetalert2"
 import UtilElement from "../components/util/element"
 import Database from "../managers/database"
 
@@ -28,8 +29,19 @@ export default class AdminHomePage {
                         .class('icon')
                         .append(new UtilElement('span').class('ph-bold', 'ph-trash'))
                         .on('click', () => {
-                            Database.instance.removeNurse(nurse)
-                            listItem.remove()
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Delete Nurse',
+                                html: 'Are you sure you want to remove this nurse<br>from the database?',
+                                showCancelButton: true,
+                                cancelButtonText: 'No, cancel',
+                                confirmButtonText: 'Yes, remove'
+                            }).then(res => {
+                                if (res.isConfirmed) {
+                                    Database.instance.removeNurse(nurse)
+                                    listItem.remove()
+                                }
+                            })
                         })
                 )
                 .prepend(
