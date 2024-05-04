@@ -60,17 +60,8 @@ export default class AdminPatientListPage {
 					.append(
 						new UtilElement("div")
 						.append(
-							new UtilElement('button')
-								.class('icon')
-								.prop('title', 'View Patient Details')
-								.html('<span class="ph-bold ph-folder-simple"></span>')
-								.on('click', () => {
-									// View Patient Details
-									window.location.hash = `admin-viewpatient?id=${patient._id}`
-								}),
-
 							new UtilElement("button")
-								.class("icon", 'secondary')
+								.class("icon")
 								.prop("title", "Generate and download QR code")
 								.toggleProp('disabled', patient.data.datetime_discharged !== null)
 								.html('<span class="ph-bold ph-qr-code"></span>')
@@ -107,6 +98,15 @@ export default class AdminPatientListPage {
 									})
 								}),
 
+							new UtilElement('button')
+								.class('icon', 'secondary')
+								.prop('title', 'View Patient Details')
+								.html('<span class="ph-bold ph-info"></span>')
+								.on('click', () => {
+									// View Patient Details
+									window.location.hash = `admin-viewpatient?id=${patient._id}`
+								}),
+
 							new UtilElement("button")
 								.class("icon", "secondary")
 								.prop("title", "Discharge Patient")
@@ -122,11 +122,27 @@ export default class AdminPatientListPage {
 										icon: 'warning'
 									}).then(res => {
 										if (res.isConfirmed) {
-											patient.data.datetime_discharged = new Date()
-											patient.data.hospital_days = Math.ceil(
-												Math.abs(new Date().getTime() - patient.data.datetime_admitted!.getTime()) /
-												(1000 * 60 * 60 * 24)
-											)
+
+											Swal.fire({
+												icon: 'question',
+												title: 'Input Final Diagnosis',
+												text: 'Add the patient\'s final diagnosis below',
+												input: 'text',
+												inputValidator: v => v.trim().length === 0 && 'Final diagnosis is required.'
+											}).then(res => {
+												if (res.isConfirmed) {
+													
+													patient.data.datetime_admitted = new Date(patient.data.datetime_admitted!.toString())
+													patient.data.datetime_discharged = new Date()
+													patient.data.final_diagnosis = res.value
+													patient.data.hospital_days = Math.ceil(
+														Math.abs(new Date().getTime() - patient.data.datetime_admitted!.getTime()) /
+														(1000 * 60 * 60 * 24)
+													)
+													Database.instance.save()
+													displayPatients(filter)
+												}
+											})
 										}
 
 									})

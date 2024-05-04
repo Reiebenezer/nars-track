@@ -59,6 +59,7 @@ export interface PatientData {
 	admitting_nurse: string | null
 	admitting_diagnosis: string | null
 	final_diagnosis: string | null
+	nurses_with_access: string[]
 }
 
 export interface PatientVitalSigns {

@@ -36,7 +36,7 @@ export default class Database {
 	}
 
 	getPatients(nurseID: string) {
-		return this.patients.filter(p => p.data.datetime_discharged === null && p.data.admitting_nurse === nurseID)
+		return this.patients.filter(p => p.data.datetime_discharged === null && p.data.nurses_with_access.includes(nurseID))
 	}
 	
 	addPatient(patient: Patient) {
@@ -138,7 +138,7 @@ export default class Database {
 			civil_status: 'Single',
 			contact_number: null,
 			datetime_admitted: new Date(),
-			datetime_discharged: new Date(),
+			datetime_discharged: null,
 			final_diagnosis: null,
 			height: null,
 			hospital_days: null,
@@ -150,7 +150,8 @@ export default class Database {
 			religion: null,
 			sex: 'F',
 			ward: null,
-			weight: null
+			weight: null,
+			nurses_with_access: [this.nurses[i%this.nurses.length].data.name]
 		 })))
 
 		this.save()

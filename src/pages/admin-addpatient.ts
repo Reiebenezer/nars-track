@@ -18,17 +18,21 @@ export default class AdminAddPatientPage {
 
     init() {
         const form = document.getElementById('admin-addpatient') as HTMLFormElement
+        (document.getElementById('datetime-admitted') as HTMLInputElement).value = new Date().toLocaleString()
 
-        form.onsubmit = e => {
+        form.onsubmit = (e: Event) => {
             e.preventDefault()
 
             const entries = Object.fromEntries(new FormData(form).entries()) as object
             const data = {
+                admitting_nurse: '',
                 ...entries,
                 datetime_discharged: null,
                 hospital_days: null,
-                final_diagnosis: null
+                final_diagnosis: null,
+                nurses_with_access: new Array<string>()
             }
+            data.nurses_with_access.push(data.admitting_nurse)
 
             Database.instance.addPatient(new Patient(data as unknown as PatientData))
             window.location.hash = 'admin-home'

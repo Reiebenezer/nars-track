@@ -21,6 +21,7 @@ input {
     &:disabled {
         background-color: color-mix(in srgb, var(--text) 5%, var(--surface));
         color: color-mix(in srgb, var(--text) 20%, var(--surface));
+        pointer-events: none;
     }
 }
 

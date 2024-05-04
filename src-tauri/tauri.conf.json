@@ -31,6 +31,24 @@
     ],
     "resources": [
       "routes/*.html"
-    ]
+    ],
+    "linux": {
+      "appimage": {
+        "bundleMediaFramework": false,
+        "files": {
+          "./routes": "./routes"
+        }
+      },
+      "deb": {
+        "files": {
+          "./routes": "./routes"
+        }
+      },
+      "rpm": {
+        "epoch": 0,
+        "files": {},
+        "release": "1"
+      }
+    }
   }
 }

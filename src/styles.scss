@@ -23,13 +23,14 @@
 
 html,
 body {
-    min-height: 100vh;
+    height: 100vh;
     background-color: var(--surface);
 }
 
 body {
     display: flex;
     flex-direction: column;
+    overflow-y: hidden;
 }
 
 header,
@@ -37,9 +38,23 @@ main {
     padding: 1.5rem;
 }
 
+img.bg {
+    all: unset;
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+
+    opacity: 5%;
+
+    width: 130vw;
+    align-self: center;
+
+}
+
 header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     a {
         text-decoration: none;
@@ -82,6 +97,11 @@ header {
     &.route-admin-viewpatient #go-back {
         display: unset;
     }
+
+    img {
+        all: unset;
+        width: 8rem;
+    }
 }
 
 main {
@@ -90,7 +110,8 @@ main {
     display: flex;
     flex-direction: column;
 
-    justify-content: center;
+    margin-top: 10vh;
+    overflow-y: auto;
 
     h1 {
         font-size: 2.5rem;
@@ -209,10 +230,9 @@ form#nurse-login {
 
 #patient-data {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(48ch, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(32ch, 1fr));
 
     gap: 1rem 4rem;
-    max-width: 80%;
 
     label {
         width: auto;
@@ -412,6 +432,7 @@ form#nurse-login {
         li {
             border: 1px solid var(--accent-3);
 
+            margin-block: 0.5rem;
             padding: 0.5rem;
             display: flex;
 
@@ -425,6 +446,36 @@ form#nurse-login {
 
             &.discharged {
                 border-color: var(--disabled);
+            }
+        }
+    }
+}
+
+label:has(~#nurses-with-access) {
+    margin-top: 2rem;
+}
+
+#nurses-with-access {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(40ch, 1fr));
+    gap: 1rem;
+
+    margin-bottom: 2rem;
+
+    li {
+        list-style: none;
+        padding: 0.5rem 1rem;
+        border: 1px solid var(--accent-2);
+        border-radius: 8px;
+
+        label {
+            display: flex;
+            justify-content: space-between;
+
+            width: 100%;
+            
+            &::after {
+                all: unset;
             }
         }
     }
