@@ -92,9 +92,16 @@ button, a.button-like {
         background-color: var(--bg);
     }
 
+    &:hover {
+        background-color: var(--accent-3);
+        color: var(--text);
+    }
+
     &:disabled {
         color: var(--disabled-text);
         background-color: var(--disabled);
+
+        cursor: not-allowed;
     }
 }
 
