@@ -233,9 +233,14 @@ form#nurse-login {
     grid-template-columns: repeat(auto-fit, minmax(32ch, 1fr));
 
     gap: 1rem 4rem;
+    width: 100%;
 
     label {
         width: auto;
+    }
+
+    button {
+        grid-column: 1;
     }
 }
 

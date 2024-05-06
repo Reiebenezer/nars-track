@@ -3,7 +3,7 @@ import Patient from "../components/patient"
 
 export default function generatePatientQR(patient: Patient, onfinish: (url: string) => void) {
     QRCode.toDataURL(
-        patient.data.name,
+        patient._id,
         {
             type: "image/png",
             color: { dark: "#1169B4", light: "#fff" },

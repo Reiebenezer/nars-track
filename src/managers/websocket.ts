@@ -39,9 +39,7 @@ export default class Scanner {
 
     waitMessage() {
         return new Promise((resolve: (data: string) => void) => {
-            this.ws.onmessage = e => {
-                resolve(e.data)
-            }
+            this.ws.addEventListener('message', e => resolve(e.data))
         })
     }
 }
