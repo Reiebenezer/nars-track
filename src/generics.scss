@@ -56,6 +56,14 @@ label:focus-within::after {
     transform: scaleX(1);
 }
 
+.swal2-container label {
+    width: unset;
+
+    &:focus-within::after {
+        transform: scaleX(0);
+    }
+}
+
 // Button
 button, a.button-like {
     padding: 0.4rem 1.2rem;

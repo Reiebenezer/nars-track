@@ -1,7 +1,9 @@
-# Tauri + Vanilla TS
+# NarsTrack
 
-This template should help get you started developing with Tauri in vanilla HTML, CSS and Typescript.
+NarsTrack is a patient monitoring system made in Vite, Tauri and Typescript. Registered nurses can record the vital signs of patients assigned to them by scanning the patient's QR code. 
 
-## Recommended IDE Setup
+The application also features an admin page, where admins can create and remove registered nurses, Admit and discharge patients, and also some utility features such as viewing patient data, generating patient QR codes, and assigning nurses to other patients. 
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+## Installing the Application
+
+The application 

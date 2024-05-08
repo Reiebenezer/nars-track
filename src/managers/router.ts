@@ -2,6 +2,7 @@ import { BaseDirectory, readTextFile } from "@tauri-apps/plugin-fs";
 import hash from "../components/util/url-hash"
 import { HomePage, NurseLoginPage, NurseHomePage, AdminLoginPage, AdminHomePage, AdminAddNursePage, AdminAddPatientPage, AdminPatientListPage, AdminViewPatientPage } from "../pages"
 import anime from 'animejs';
+import AdminViewMeasuredDataPage from "../pages/admin-viewmeasureddata";
 
 
 export default class Router {
@@ -80,6 +81,10 @@ export default class Router {
 
                     case 'admin-viewpatient':
                         AdminViewPatientPage.instance.init()
+                        break
+
+                    case 'admin-viewmeasureddata':
+                        AdminViewMeasuredDataPage.instance.init()
                         break
                 }
 

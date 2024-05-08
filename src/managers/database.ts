@@ -192,6 +192,14 @@ export default class Database {
 		await this.clear()
 		this.populate()
 	}
+
+	async removeDischarged() {
+		if (!this.store)
+			throw new ReferenceError('You did not call init!')
+
+		this.patients = this.patients.filter(p => p.data.datetime_discharged === null)
+		this.save()
+	}
 }
 
 declare global {
