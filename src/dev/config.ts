@@ -1,4 +1,4 @@
 export namespace debug {
-    export const bypass_ws = true
+    export const bypass_ws = false
 }
 
