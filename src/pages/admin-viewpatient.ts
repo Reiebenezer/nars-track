@@ -47,6 +47,7 @@ export default class AdminViewPatientPage {
                                         nurses.push(name)
         
                                     console.log(nurses)
+                                    Database.instance.save()
                                 })
                         )
                 )

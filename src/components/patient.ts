@@ -2,18 +2,12 @@ export default class Patient {
     
     data: PatientData
     vitalsigns = new Array<PatientVitalSigns>()
-    fdar: PatientFdar
+    fdar = new Array<PatientFdar>()
 
     _id: string = crypto.randomUUID()
 
     constructor(data: PatientData) {
         this.data = data
-        this.fdar = {
-            action: null,
-            data: null,
-            focus: null,
-            response: null
-        }
     }
 
     setvitalsigns(arr: PatientVitalSigns[]) {
@@ -21,7 +15,7 @@ export default class Patient {
         return this
     }
 
-    setFdar(arr: PatientFdar) {
+    setFdar(arr: PatientFdar[]) {
         this.fdar = arr
         return this
     }
@@ -54,7 +48,6 @@ export interface PatientData {
 	datetime_admitted: Date | null
 	datetime_discharged: Date | null
 	hospital_days: number | null
-	ward: string | null
 	attending_physician: string | null
 	admitting_nurse: string | null
 	admitting_diagnosis: string | null
@@ -64,6 +57,7 @@ export interface PatientData {
 
 export interface PatientVitalSigns {
 	timestamp: Date
+	nurse: string
 	temperature: number | null
 	pulse: number | null
 	respiration: number | null

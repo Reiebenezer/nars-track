@@ -26,7 +26,8 @@ Database.instance.init().then(() => {
 	if (debug.bypass_ws) Router.instance.init()
 	else
 		Scanner.instance
-			.init('192.168.1.1', 6969)
+			.init('localhost', 6969)
+			// .init('192.168.1.1', 6969)
 			.then(msg => {
 				console.log(msg)
                 

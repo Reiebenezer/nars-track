@@ -24,10 +24,10 @@ export default class AdminViewMeasuredDataPage {
 
         document.getElementById(
             'param-name'
-        )!.innerHTML = `Patient ${patient.data.name}'s Vital Signs Record`
+        )!.innerHTML = `Patient ${patient.data.name}'s Vital Signs and FDAR Record`
         const measuredDataContainer = document.getElementById('measured-data')!
 
-        for (const vs of patient.vitalsigns) {
+        patient.vitalsigns.forEach((vs, index) => {
             const container = new UtilElement('div')
                 .class('vitalsign-record')
                 .append(
@@ -66,6 +66,29 @@ export default class AdminViewMeasuredDataPage {
                 innerContainer.append(label.element)
             })
 
+            console.log(patient.fdar)
+            Object.entries(patient.fdar[index]).forEach(([key, value]) => {
+                if (key === 'timestamp') return
+
+                const label = new UtilElement('label')
+                    .html(
+                        key.charAt(0).toUpperCase() +
+                            key
+                                .replace(
+                                    /\_[A-Za-z0-9]/g,
+                                    match => ' ' + match.charAt(1).toUpperCase()
+                                )
+                                .slice(1)
+                    )
+                    .append(
+                        new UtilElement('input')
+                            .prop('disabled')
+                            .prop('value', value)
+                    )
+
+                innerContainer.append(label.element)
+            })
+
             container.append(innerContainer)
             measuredDataContainer.appendChild(container.element)
 
@@ -73,6 +96,6 @@ export default class AdminViewMeasuredDataPage {
                 '--max-height', 
                 innerContainer.element.scrollHeight + 'px'
             ) 
-        }
+        })
     }
 }

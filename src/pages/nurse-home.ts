@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2'
 import Nurse from '../components/nurse'
-import { PatientVitalSigns } from '../components/patient'
+import { PatientFdar, PatientVitalSigns } from '../components/patient'
 import UtilElement from '../components/util/element'
 import hash from '../components/util/url-hash'
 import Database from '../managers/database'
@@ -64,7 +64,11 @@ export default class NurseHomePage {
 
     async #scan(): Promise<void> {
         const form = document.getElementById('patient-data')! as HTMLFormElement
-        let patientID = await Scanner.instance.waitMessage()
+
+        let patientIDFunc = Scanner.instance.waitMessage()
+        Scanner.instance.ws.send(Database.instance.patients[0]._id)
+
+        let patientID = await patientIDFunc
         const indicator_text = document.querySelector('p.await-input')!
 
         const nurseName = hash().params.find(p => p[0] === 'name')
@@ -100,16 +104,25 @@ export default class NurseHomePage {
             }
 
             const vitalsign: PatientVitalSigns = {
+                timestamp: new Date(),
+                nurse: nurseName[1],
                 blood_pressure: null,
                 oxygen: null,
                 pulse: null,
                 respiration: null,
                 temperature: null,
-                timestamp: new Date(),
+            }
+
+            const fdar: PatientFdar = {
+                action: null,
+                data: null,
+                focus: null,
+                response: null
             }
 
             addEntries(essential_data)
             addEntries(vitalsign)
+            addFDAR()
 
             form.appendChild(
                 new UtilElement('button').html('Send Data').element
@@ -119,9 +132,25 @@ export default class NurseHomePage {
                 const data = {
                     ...Object.fromEntries(new FormData(form).entries()),
                     timestamp: new Date(),
-                } as PatientVitalSigns
+                } as PatientVitalSigns & PatientFdar
 
-                patient.vitalsigns.push(data)
+                patient.vitalsigns.push({
+                    blood_pressure: data.blood_pressure,
+                    nurse: nurseName[1],
+                    oxygen: data.oxygen,
+                    pulse: data.pulse,
+                    respiration: data.respiration,
+                    temperature: data.temperature,
+                    timestamp: data.timestamp
+                })
+
+                patient.fdar.push({
+                    action: data.action,
+                    data: data.data,
+                    focus: data.focus,
+                    response: data.response
+                })
+
                 Database.instance.save()
 
                 indicator_text.innerHTML = 'Data Saved. Waiting for next input...'
@@ -130,11 +159,15 @@ export default class NurseHomePage {
 				await this.#scan()
             }
 
-            indicator_text.innerHTML = 'Fetch Results:'
+            indicator_text.innerHTML = 'Patient Vital Signs and FDAR Form'
 
-            function addEntries(entries: object) {
+            function addEntries(entries: object, asTextarea = false) {
                 Object.entries(entries).forEach(entry => {
-                    const el = new UtilElement('input')
+                    if (entry[0] === 'timestamp') return
+
+                    const nums = ['oxygen', 'pulse', 'respiration', 'temperature']
+                    const el = new UtilElement(asTextarea ? 'textarea' : 'input')
+                        .prop('type', nums.includes(entry[0]) ? 'number' : 'text')
                         .prop('name', entry[0])
                         .prop('value', processEntry(entry[1]))
                         .prop('required')
@@ -164,6 +197,53 @@ export default class NurseHomePage {
                     return entry
                 }
             }
+
+            function addFDAR() {
+                const timestamp = new Date()
+                const container = new UtilElement('div').class('fdar')
+                const notes = new  UtilElement('div').class('progress-notes').html('Progress Notes')
+
+                container.append(
+					new UtilElement('label')
+						.html('Date/Hour')
+						.append(
+							new UtilElement('input')
+								.prop('name', 'timestamp')
+								.prop('value', timestamp.toLocaleString())
+								.prop('disabled')
+						),
+
+					new UtilElement('label')
+						.html('Focus')
+						.append(
+							new UtilElement('textarea')
+                                .prop('required')
+								.prop('rows', '1')
+								.prop('name', 'focus')
+						)
+				)
+
+                Object.entries(fdar).forEach(([ label, _ ]) => {
+                    if (label === 'focus') return
+
+					const labelEl = new UtilElement('label')
+						.html(
+							label.charAt(0).toUpperCase() +
+								label.slice(1).replace(/_/g, ' ')
+                        )
+						.append(
+							new UtilElement('textarea')
+								.prop('name', label)
+								.prop('required')
+								.prop('rows', '1')
+						)
+
+					notes.append(labelEl)
+                })
+
+                container.append(notes)
+                form.appendChild(container.element)
+            }   
         } catch (error) {
             console.error(error)
         }

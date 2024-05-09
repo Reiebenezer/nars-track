@@ -208,6 +208,8 @@ form#nurse-login {
         display: grid;
         gap: 0.5rem;
 
+        width: 100%;
+
         &:empty::after {
             content: 'No patients have been assigned to you.';
 
@@ -225,23 +227,74 @@ form#nurse-login {
             display: flex;
             justify-content: space-between;
             align-items: center;
+
         }
     }
 }
 
 #patient-data {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(32ch, 1fr));
+    justify-items: center;
 
     gap: 1rem 4rem;
     width: 100%;
 
+    border: 1px solid var(--accent-2);
+    border-radius: 8px;
+    padding: 1.5rem;
+
     label {
-        width: auto;
+        width: 100%;
+        display: grid;
+        margin-block: 0.5rem;
+
+        textarea {
+            resize: vertical;
+
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid var(--accent-1);
+
+            font: inherit;
+            
+            padding: 0.5rem;
+            padding-bottom: 0.25rem;
+
+            font-size: larger;
+
+            &:focus {
+                outline: none;
+            }
+        }
     }
 
     button {
         grid-column: 1;
+        width: fit-content;
+        padding-inline: 12rem;
+    }
+
+    .fdar {
+        display: grid;
+        grid-template-columns: 1fr 2fr 2fr;
+        gap: 1.5rem;
+        width: 100%;
+
+        > div {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        > div label {
+            margin-left: 0.5rem;
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+
+            height: fit-content;
+        }
     }
 }
 

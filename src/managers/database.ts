@@ -23,7 +23,7 @@ export default class Database {
     async init() {
 		this.store = await new Store('db.bin')
 
-		const patientDatas = JSON.parse(await this.store.get('patients') ?? '[]') as { _id: string, data: PatientData, vitalsigns: PatientVitalSigns[], fdar: PatientFdar }[]
+		const patientDatas = JSON.parse(await this.store.get('patients') ?? '[]') as { _id: string, data: PatientData, vitalsigns: PatientVitalSigns[], fdar: PatientFdar[] }[]
 		const  nursesDatas = JSON.parse(await this.store.get('nurses') ?? '[]') as { _id: string, data: NurseData }[]
 
 		this.patients = patientDatas.map(p => new Patient(p.data).setvitalsigns(p.vitalsigns).setFdar(p.fdar).setID(p._id))
@@ -149,7 +149,6 @@ export default class Database {
 			nationality: null,
 			religion: null,
 			sex: 'F',
-			ward: null,
 			weight: null,
 			nurses_with_access: [this.nurses[i%this.nurses.length].data.name]
 		 })))
