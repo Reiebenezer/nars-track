@@ -66,7 +66,7 @@ export default class NurseHomePage {
         const form = document.getElementById('patient-data')! as HTMLFormElement
 
         let patientIDFunc = Scanner.instance.waitMessage()
-        Scanner.instance.ws.send(Database.instance.patients[0]._id)
+        // Scanner.instance.ws.send(Database.instance.patients[0]._id)
 
         let patientID = await patientIDFunc
         const indicator_text = document.querySelector('p.await-input')!
