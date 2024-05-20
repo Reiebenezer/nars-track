@@ -198,6 +198,20 @@ form#nurse-login {
         max-height: var(--max-height);
     }
 
+    .search-box {
+        display: flex;
+        gap: 0.5rem;
+
+        margin-bottom: 1rem;
+
+        button {
+            width: 2.25rem;
+            aspect-ratio: 1;
+            display: grid;
+            place-content: center;
+        }
+    }
+
     h2 {
         margin-bottom: 1rem;
     }
@@ -211,7 +225,7 @@ form#nurse-login {
         width: 100%;
 
         &:empty::after {
-            content: 'No patients have been assigned to you.';
+            content: 'No patients have been assigned to you, or your search does not match any patient.';
 
             font-size: 0.9rem;
             color: var(--disabled-text);
@@ -242,6 +256,10 @@ form#nurse-login {
     border: 1px solid var(--accent-2);
     border-radius: 8px;
     padding: 1.5rem;
+
+    &:empty {
+        display: none;
+    }
 
     label {
         width: 100%;
@@ -622,4 +640,22 @@ label:has(~#nurses-with-access) {
         }
     }
 
+}
+
+#patient-data.view-patient {
+
+    grid-template-columns: 1fr 1fr;
+
+    :first-child {
+        grid-row: 3;
+    }
+
+    :not(:nth-child(2), :nth-child(3)) {
+        grid-column: 1 / span 2;
+    }
+
+    :nth-child(2) {
+        height: fit-content;
+        gap: 0.5rem;
+    }
 }

@@ -37,6 +37,22 @@ export default class NurseHomePage {
             parent.classList.toggle('open')
         }
 
+		this.#getAssignedPatients()
+        const changeSearch = () => {
+			const text = searchInput.value
+			this.#getAssignedPatients(text)
+		}
+
+		const searchInput = document.getElementById(
+			"patient-search"
+		) as HTMLInputElement
+		const searchBtn = document.getElementById(
+			"patient-search-btn"
+		) as HTMLButtonElement
+
+		searchInput.onkeyup = changeSearch
+		searchBtn.onclick = changeSearch
+
         if (Scanner.instance.connected) {
 			await this.#scan()
 
@@ -45,10 +61,14 @@ export default class NurseHomePage {
         }
     }
 
-    #getAssignedPatients() {
+    #getAssignedPatients(text?: string) {
         const name = hash().params.find(item => item[0] === 'name')![1]
         const patients = Database.instance.getPatients(name)
+            .filter(p => p.data.name.includes(text ?? ''))
         // const nurses = Database.instance.nurses.map(n => n.data.name)
+
+        document
+            .querySelector('#assigned-patients ul')!.innerHTML = ''
 
         document
             .querySelector('#assigned-patients ul')
@@ -57,18 +77,29 @@ export default class NurseHomePage {
                     p =>
                         new UtilElement('li').html(
                             `<p><strong>Name: </strong>${p.data.name}</p>`
-                        ).element
+                        )
+                        .append(
+                            new UtilElement('button')
+                                .html('<i class="ph-bold ph-plus icon"></i>')
+                                .on('click', () => this.#showpatient(p._id))
+                        )
+
+                        .element
                 )
             )
     }
 
     async #scan(): Promise<void> {
-        const form = document.getElementById('patient-data')! as HTMLFormElement
-
+        
         let patientIDFunc = Scanner.instance.waitMessage()
         // Scanner.instance.ws.send(Database.instance.patients[0]._id)
-
+        
         let patientID = await patientIDFunc
+        await this.#showpatient(patientID)
+    }
+    
+    async #showpatient(patientID: string) {
+        const form = document.getElementById('patient-data')! as HTMLFormElement
         const indicator_text = document.querySelector('p.await-input')!
 
         const nurseName = hash().params.find(p => p[0] === 'name')
@@ -107,9 +138,9 @@ export default class NurseHomePage {
                 timestamp: new Date(),
                 nurse: nurseName[1],
                 blood_pressure: null,
-                oxygen: null,
+                oxygen_saturation: null,
                 pulse: null,
-                respiration: null,
+                respiratory_rate: null,
                 temperature: null,
             }
 
@@ -137,9 +168,9 @@ export default class NurseHomePage {
                 patient.vitalsigns.push({
                     blood_pressure: data.blood_pressure,
                     nurse: nurseName[1],
-                    oxygen: data.oxygen,
+                    oxygen_saturation: data.oxygen_saturation,
                     pulse: data.pulse,
-                    respiration: data.respiration,
+                    respiratory_rate: data.respiratory_rate,
                     temperature: data.temperature,
                     timestamp: data.timestamp
                 })

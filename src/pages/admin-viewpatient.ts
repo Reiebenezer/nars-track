@@ -25,6 +25,8 @@ export default class AdminViewPatientPage {
         if (!container) return
         if (!nurseContainer) return
 
+        container.classList.add('view-patient')
+
         Database.instance.nurses.forEach(nurse => {
 
             const label = new UtilElement('li')
@@ -57,6 +59,18 @@ export default class AdminViewPatientPage {
 
         Object.entries(patient.data).forEach(([ key, value ]) => {
             if (key === "nurses_with_access") return
+
+            if (key === 'profile') {
+                const picture = new UtilElement('label')
+                                    .html(key.charAt(0).toUpperCase() + key.replace(/\_[A-Za-z0-9]/g, match => ' ' + match.charAt(1).toUpperCase()).slice(1))
+                                    .append(
+                                        new UtilElement('img')
+                                        .prop('src', value)
+                                    )
+
+                container.append(picture.element)
+                return
+            }
 
             const label = new UtilElement('label')
                 .html(key.charAt(0).toUpperCase() + key.replace(/\_[A-Za-z0-9]/g, match => ' ' + match.charAt(1).toUpperCase()).slice(1))

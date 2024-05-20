@@ -29,6 +29,7 @@ export default class Patient {
 export interface PatientData {
 	name: string
 	birthdate: Date | null
+	profile: string
 	birthplace: string | null
 	address: string | null
 	sex: 'F' | 'M' 
@@ -52,6 +53,7 @@ export interface PatientData {
 	admitting_nurse: string | null
 	admitting_diagnosis: string | null
 	final_diagnosis: string | null
+	chief_complaint: string | null
 	nurses_with_access: string[]
 }
 
@@ -60,9 +62,9 @@ export interface PatientVitalSigns {
 	nurse: string
 	temperature: number | null
 	pulse: number | null
-	respiration: number | null
+	respiratory_rate: number | null
 	blood_pressure: string | null
-	oxygen: number | null
+	oxygen_saturation: number | null
 }
 
 export interface PatientFdar {
