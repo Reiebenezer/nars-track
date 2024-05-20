@@ -102,6 +102,8 @@ export default class NurseHomePage {
         const form = document.getElementById('patient-data')! as HTMLFormElement
         const indicator_text = document.querySelector('p.await-input')!
 
+        form.classList.add('nurse-home')
+
         const nurseName = hash().params.find(p => p[0] === 'name')
 
         if (!nurseName) {
@@ -152,6 +154,17 @@ export default class NurseHomePage {
             }
 
             addEntries(essential_data)
+            const label = new UtilElement('label')
+                .html(
+                    'Profile'
+                )
+                .append(
+                    new UtilElement('img')
+                        .prop('src', patient.data.profile)
+                )
+
+            form.appendChild(label.element)
+            
             addEntries(vitalsign)
             addFDAR()
 
